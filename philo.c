@@ -21,11 +21,12 @@ static int	main_check(t_data *data, int i)
 	return (GOOD);
 }
 
-static int	create_threads(t_data *data)
+static int	create_threads(t_data *data, bool arg_meal)
 {
 	int i;
 
 	i = 0;
+	(void)arg_meal;
 	while (i < data->n_philo)
 	{
 		fill_philo(data, &data->philos[i], i);
@@ -37,7 +38,7 @@ static int	create_threads(t_data *data)
 	{
 		if (i == data->n_philo)
 			i = 0;
-		if (main_check(data, i) == DEAD)
+		if (main_check(data, i) == DEAD || data->philos[i].n_meals == 0)
 			break;
 		i++;
 	}
@@ -54,12 +55,14 @@ int main(int ac, char **av)
 {
 	t_data	data;
 
-	atexit(ll);
-	if (ac == 5)
+	// atexit(ll);
+	if (ac == 5 || ac == 6)
 	{
+		if (ac == 6)
+			data.last_arg = true;
 		if (fill_struct(&data, av) == ERROR)
 			return (ERROR);
-		if (create_threads(&data) == ERROR)
+		if (create_threads(&data, false) == ERROR)
 			return (ERROR);
 		destroy(&data);
 		free(data.threads);

@@ -28,12 +28,13 @@ void *routine(void *param)
 			return (NULL);
 		my_usleep(philo->data->t_sleep, philo);
 	}
-	while(check_dead(philo) == GOOD)
+	while(check_dead(philo) == GOOD && philo->n_meals != 0)
 	{
 		my_printf("%ld %d is thinking\n", philo);
 		if (take_forks(philo) == DEAD)
 			break;
 		my_printf("%ld %d is eating\n", philo);
+		philo->n_meals--;
 		pthread_mutex_lock(&philo->data->save);
 		philo->last_meal = get_time();
 		pthread_mutex_unlock(&philo->data->save);
