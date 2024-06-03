@@ -17,7 +17,7 @@ int	my_usleep(long sleep_time, t_philo *philo)
 	start = get_time();
 	while (get_time() - start < sleep_time && check_dead(philo) == true)
 	{
-		usleep(42);
+		usleep(500);
 	}
 	return (GOOD);
 }
