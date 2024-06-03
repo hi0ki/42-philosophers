@@ -1,5 +1,20 @@
 #include "philo.h"
 
+void destroy(t_data *data)
+{
+	int i;
+
+	i = 0;
+	pthread_mutex_destroy(&data->print_lock);
+	pthread_mutex_destroy(&data->check);
+	pthread_mutex_destroy(&data->save);
+	while (i < data->n_philo)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+}
+
 int	fill_struct(t_data *data, char **av)
 {
 	int i;

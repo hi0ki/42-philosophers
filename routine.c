@@ -1,12 +1,12 @@
 #include "philo.h"
 
-void unlock_forks(t_philo *philo)
+static void unlock_forks(t_philo *philo)
 {
 		pthread_mutex_unlock(&philo->data->forks[philo->l_fork]);
 		pthread_mutex_unlock(&philo->data->forks[philo->r_fork]);
 }
 
-int take_forks(t_philo *philo)
+static int take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->forks[philo->l_fork]);
 	if (my_printf("%ld %d has taken a fork\n", philo) == DEAD)
@@ -14,7 +14,6 @@ int take_forks(t_philo *philo)
 	pthread_mutex_lock(&philo->data->forks[philo->r_fork]);
 	if (my_printf("%ld %d has taken a fork\n", philo) == DEAD)
 			return (unlock_forks(philo), DEAD);
-	unlock_forks(philo);
 	return (GOOD);
 }
 
@@ -39,6 +38,7 @@ void *routine(void *param)
 		philo->last_meal = get_time();
 		pthread_mutex_unlock(&philo->data->save);
 		my_usleep(philo->data->t_eat, philo);
+		unlock_forks(philo);
 		my_printf("%ld %d is sleeping\n", philo);
 		my_usleep(philo->data->t_sleep, philo);
 	}

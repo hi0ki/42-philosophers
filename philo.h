@@ -43,11 +43,12 @@ long get_time();
 int check_dead(t_philo *philo);
 int	my_usleep(long sleep_time, t_philo *philo);
 int my_printf(char *s, t_philo *philo);
-
+int check_time(t_data *data, t_philo *philo);
 /*				fill sturcts			*/
-int	fill_struct(t_data *data, char **av);
+int		fill_struct(t_data *data, char **av);
 void	fill_philo(t_data *data, t_philo *philo, int i);
-
+void 	destroy(t_data *data);
+/*				routine 				*/
 void *routine(void *param);
 
 

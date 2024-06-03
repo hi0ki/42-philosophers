@@ -44,3 +44,10 @@ int check_dead(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->check);
 	return (GOOD);
 }
+
+int check_time(t_data *data, t_philo *philo)
+{
+	if (get_time() - philo->last_meal >= data->t_die)
+		return (DEAD);
+	return (GOOD);
+}
