@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eel-ansa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/04 16:06:07 by eel-ansa          #+#    #+#             */
+/*   Updated: 2024/06/04 16:06:13 by eel-ansa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-long get_time()
+long	get_time(void)
 {
 	long			time;
 	struct timeval	s_tm;
@@ -17,12 +29,12 @@ int	my_usleep(long sleep_time, t_philo *philo)
 	start = get_time();
 	while (get_time() - start < sleep_time && check_dead(philo) == true)
 	{
-		usleep(500);
+		usleep(200);
 	}
 	return (GOOD);
 }
 
-int my_printf(char *s, t_philo *philo)
+int	my_printf(char *s, t_philo *philo)
 {
 	if (check_dead(philo) == false)
 		return (DEAD);
@@ -33,7 +45,7 @@ int my_printf(char *s, t_philo *philo)
 	return (GOOD);
 }
 
-int check_dead(t_philo *philo)
+int	check_dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->check);
 	if (philo->data->dead == false)
@@ -45,7 +57,7 @@ int check_dead(t_philo *philo)
 	return (GOOD);
 }
 
-int check_time(t_data *data, t_philo *philo)
+int	check_time(t_data *data, t_philo *philo)
 {
 	if (get_time() - philo->last_meal >= data->t_die)
 		return (DEAD);

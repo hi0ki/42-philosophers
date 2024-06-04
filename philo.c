@@ -1,9 +1,16 @@
-#include "philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eel-ansa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/04 16:05:40 by eel-ansa          #+#    #+#             */
+/*   Updated: 2024/06/04 16:05:42 by eel-ansa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void ll()
-{
-		system("leaks philo");
-}
+#include "philo.h"
 
 static int	main_check(t_data *data, int i)
 {
@@ -13,7 +20,8 @@ static int	main_check(t_data *data, int i)
 		pthread_mutex_lock(&data->check);
 		data->dead = false;
 		pthread_mutex_unlock(&data->check);
-		printf("\033[1;31m%ld %d is died\n", get_time() - data->start_time, data->philos[i].id);
+		printf("\033[1;31m%ld %d is died\n",
+			get_time() - data->start_time, data->philos[i].id);
 		pthread_mutex_unlock(&data->save);
 		return (DEAD);
 	}
@@ -21,12 +29,11 @@ static int	main_check(t_data *data, int i)
 	return (GOOD);
 }
 
-static int	create_threads(t_data *data, bool arg_meal)
+static int	create_threads(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	(void)arg_meal;
 	while (i < data->n_philo)
 	{
 		fill_philo(data, &data->philos[i], i);
@@ -39,7 +46,7 @@ static int	create_threads(t_data *data, bool arg_meal)
 		if (i == data->n_philo)
 			i = 0;
 		if (main_check(data, i) == DEAD || data->philos[i].n_meals == 0)
-			break;
+			break ;
 		i++;
 	}
 	i = 0;
@@ -51,18 +58,17 @@ static int	create_threads(t_data *data, bool arg_meal)
 	return (GOOD);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_data	data;
 
-	// atexit(ll);
 	if (ac == 5 || ac == 6)
 	{
 		if (ac == 6)
 			data.last_arg = true;
 		if (fill_struct(&data, av) == ERROR)
 			return (ERROR);
-		if (create_threads(&data, false) == ERROR)
+		if (create_threads(&data) == ERROR)
 			return (ERROR);
 		destroy(&data);
 		free(data.threads);

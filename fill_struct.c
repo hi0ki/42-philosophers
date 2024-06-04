@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_struct.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eel-ansa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/04 16:06:02 by eel-ansa          #+#    #+#             */
+/*   Updated: 2024/06/04 16:06:03 by eel-ansa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void destroy(t_data *data)
+void	destroy(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	pthread_mutex_destroy(&data->print_lock);
@@ -15,7 +27,7 @@ void destroy(t_data *data)
 	}
 }
 
-static void init(t_data *data)
+static void	init(t_data *data)
 {
 	int	i;
 
@@ -42,7 +54,7 @@ int	fill_struct(t_data *data, char **av)
 	data->t_die = ft_atoi(av[2]);
 	data->t_eat = ft_atoi(av[3]);
 	data->t_sleep = ft_atoi(av[4]);
-	if (data->n_philo > 200 || data->t_die < 60 || 
+	if (data->n_philo > 200 || data->n_philo <= 0 || data->t_die < 60 || 
 		data->t_eat < 60 || data->t_sleep < 60 || data->n_meals == 0)
 		return (ERROR);
 	data->threads = malloc(data->n_philo * sizeof(pthread_t));
