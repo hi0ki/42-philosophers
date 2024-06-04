@@ -46,8 +46,8 @@ void	*routine(void *param)
 		if (take_forks(philo) == DEAD)
 			break ;
 		my_printf("%ld %d is eating\n", philo);
-		philo->n_meals--;
 		pthread_mutex_lock(&philo->data->save);
+		philo->n_meals--;
 		philo->last_meal = get_time();
 		pthread_mutex_unlock(&philo->data->save);
 		my_usleep(philo->data->t_eat, philo);
