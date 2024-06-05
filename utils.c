@@ -47,6 +47,8 @@ int	my_printf(char *s, t_philo *philo)
 
 int	check_dead(t_philo *philo)
 {
+	if (philo == NULL)
+		return (true);
 	pthread_mutex_lock(&philo->data->check);
 	if (philo->data->dead == false)
 	{
