@@ -40,8 +40,8 @@ static int	main_check(t_data *data, int i)
 		pthread_mutex_lock(&data->check);
 		data->dead = false;
 		pthread_mutex_unlock(&data->check);
-		printf("\033[1;31m%ld %d is died\n",
-			get_time() - data->start_time, data->philos[i].id);
+		printf("%ld %d is died\n", get_time() - data->start_time, 
+			data->philos[i].id);
 		pthread_mutex_unlock(&data->save);
 		return (DEAD);
 	}
