@@ -22,20 +22,40 @@
 
 static int	create_threads(t_data *data)
 {
-	// int	i;
-	// int	pid;
+	int	i;
+    int status;
 
-	(void)data;
-	// i = 0;
-	// while (i < data->n_philo)
-	// {
-		fork();
-		printf("mehdi\n");
-		fork();
-		printf("mehdi\n");
-	// 	i++;
-	// }
-	return (GOOD);
+	i = 0;
+    while (i < data->n_philo) {
+        data->pids[i] = fork();
+        if (data->pids[i] == 0) 
+        {
+            data->id = i + 1;
+            pthread_create(&data->thread, NULL, &check, data);
+            routine(data);
+            pthread_join(data->thread, NULL);
+            exit(EXIT_SUCCESS);
+        }
+        i++;
+    }
+    i = 0;
+    while (i < data->n_philo)
+    {
+        waitpid(-1, &status, 0);
+        if (status == 256)
+        {
+            i = 0;
+            while(i < data->n_philo)
+            {
+                kill(data->pids[i], 9);
+                i++;
+            }
+        }
+        sem_post(data->dead);
+        i++;
+    }
+
+    return 0;
 }
 
 int	main(int ac, char **av)

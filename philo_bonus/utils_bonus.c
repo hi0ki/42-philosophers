@@ -12,38 +12,36 @@
 
 #include "philo_bonus.h"
 
-// long	get_time(void)
-// {
-// 	long			time;
-// 	struct timeval	s_tm;
+long	get_time(void)
+{
+	long			time;
+	struct timeval	s_tm;
 
-// 	gettimeofday(&s_tm, NULL);
-// 	time = s_tm.tv_sec * 1000 + s_tm.tv_usec / 1000;
-// 	return (time);
-// }
+	gettimeofday(&s_tm, NULL);
+	time = s_tm.tv_sec * 1000 + s_tm.tv_usec / 1000;
+	return (time);
+}
 
-// int	my_usleep(long sleep_time, t_philo *philo)
-// {
-// 	long	start;
+int	my_usleep(long sleep_time, t_data *philo)
+{
+	long	start;
 
-// 	start = get_time();
-// 	while (get_time() - start < sleep_time && check_dead(philo) == true)
-// 	{
-// 		usleep(200);
-// 	}
-// 	return (GOOD);
-// }
+	(void)philo;
+	start = get_time();
+	while (get_time() - start < sleep_time)
+	{
+		usleep(1000);
+	}
+	return (GOOD);
+}
 
-// int	my_printf(char *s, t_philo *philo)
-// {
-// 	if (check_dead(philo) == false)
-// 		return (DEAD);
-// 	pthread_mutex_lock(&philo->data->print_lock);
-// 	if (check_dead(philo) == true)
-// 		printf(s, get_time() - philo->data->start_time, philo->id);
-// 	pthread_mutex_unlock(&philo->data->print_lock);
-// 	return (GOOD);
-// }
+int	my_printf(char *s, t_data *philo)
+{
+	// sem_wait(philo->dead);
+	printf(s, get_time() - philo->start_time, philo->id);
+	// sem_post(philo->dead);
+	return (GOOD);
+}
 
 // int	check_dead(t_philo *philo)
 // {
