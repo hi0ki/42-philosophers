@@ -12,50 +12,50 @@
 
 #include "philo_bonus.h"
 
-
-/*
-		onzid id f struct dyali
-		ghadi nforki o child nsifthom nichan l routine 
-		o semaphore andirha lforks
-		o mora fach ndir hadchi ndir thread lkola child bach njrb wach mat ola mat ndir wahd variable dyal symaphore bach n3rf rah mat
-*/
-
-static int	create_threads(t_data *data)
+static void	wait_process(t_data *data, int status)
 {
 	int	i;
-    int status;
 
 	i = 0;
-    while (i < data->n_philo) {
-        data->pids[i] = fork();
-        if (data->pids[i] == 0) 
-        {
-            data->id = i + 1;
-            pthread_create(&data->thread, NULL, &check, data);
-            routine(data);
-            pthread_join(data->thread, NULL);
-            exit(EXIT_SUCCESS);
-        }
-        i++;
-    }
-    i = 0;
-    while (i < data->n_philo)
-    {
-        waitpid(-1, &status, 0);
-        if (status == 256)
-        {
-            i = 0;
-            while(i < data->n_philo)
-            {
-                kill(data->pids[i], 9);
-                i++;
-            }
-        }
-        sem_post(data->dead);
-        i++;
-    }
+	while (i < data->n_philo)
+	{
+		waitpid(-1, &status, 0);
+		if (status == 256)
+		{
+			i = 0;
+			while (i < data->n_philo)
+			{
+				kill(data->pids[i], 9);
+				i++;
+			}
+		}
+		sem_post(data->dead);
+		i++;
+	}
+}
 
-    exit (1);
+static int	creat_process(t_data *data)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	status = 0;
+	while (i < data->n_philo)
+	{
+		data->pids[i] = fork();
+		if (data->pids[i] == 0) 
+		{
+			data->id = i + 1;
+			pthread_create(&data->thread, NULL, &check, data);
+			routine(data);
+			pthread_join(data->thread, NULL);
+			exit(EXIT_SUCCESS);
+		}
+		i++;
+	}
+	wait_process(data, status);
+	return (GOOD);
 }
 
 int	main(int ac, char **av)
@@ -68,6 +68,11 @@ int	main(int ac, char **av)
 			data.last_arg = true;
 		if (fill_struct(&data, av) == ERROR)
 			return (ERROR);
-		create_threads(&data);
+		if (creat_process(&data) == GOOD)
+		{
+			free(data.pids);
+			return (ERROR);
+		}
 	}
+	return (GOOD);
 }

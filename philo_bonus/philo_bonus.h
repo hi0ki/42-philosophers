@@ -22,26 +22,14 @@
 # include <stdbool.h>
 # include <sys/time.h>
 
-# define DEAD -1
 # define ERROR 0
 # define GOOD 1
 
-typedef struct s_data	t_data;
-
-typedef struct s_philo{
-	int		id;
-	int		r_fork;
-	int		l_fork;
-	int		n_meals;
-	long	last_meal;
-	t_data	*data;
-}t_philo;
-
 typedef struct s_data{
 	sem_t			*var;
-	sem_t			**dead;
-	sem_t			**save;
-	sem_t			**sem_meals;
+	sem_t			*dead;
+	sem_t			*save;
+	sem_t			*sem_meals;
 	pthread_t		thread;
 	bool			last_arg;
 	int				*pids;
@@ -58,16 +46,12 @@ typedef struct s_data{
 /*				utils					*/
 int		ft_atoi(char *str);
 long	get_time(void);
-int		check_dead(t_philo *philo);
 int		my_usleep(long sleep_time, t_data *philo);
 int		my_printf(char *s, t_data *philo);
-int		check_time(t_data *data, t_philo *philo);
 /*				fill sturcts			*/
 int		fill_struct(t_data *data, char **av);
-void	fill_philo(t_data *data, t_philo *philo, int i);
-void	destroy(t_data *data);
 /*				routine 				*/
-void	*routine(t_data *philo);
-void *check(void *param);
+void	routine(t_data *philo);
+void	*check(void *param);
 
 #endif

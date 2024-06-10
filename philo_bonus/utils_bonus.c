@@ -37,8 +37,8 @@ int	my_usleep(long sleep_time, t_data *philo)
 
 int	my_printf(char *s, t_data *philo)
 {
-	sem_wait(philo->dead[philo->id - 1]);
+	sem_wait(philo->dead);
 	printf(s, get_time() - philo->start_time, philo->id);
-	sem_post(philo->dead[philo->id - 1]);
+	sem_post(philo->dead);
 	return (GOOD);
 }
