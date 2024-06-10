@@ -37,29 +37,8 @@ int	my_usleep(long sleep_time, t_data *philo)
 
 int	my_printf(char *s, t_data *philo)
 {
-	// sem_wait(philo->dead);
+	sem_wait(philo->dead[philo->id - 1]);
 	printf(s, get_time() - philo->start_time, philo->id);
-	// sem_post(philo->dead);
+	sem_post(philo->dead[philo->id - 1]);
 	return (GOOD);
 }
-
-// int	check_dead(t_philo *philo)
-// {
-// 	if (philo == NULL)
-// 		return (true);
-// 	pthread_mutex_lock(&philo->data->check);
-// 	if (philo->data->dead == false)
-// 	{
-// 		pthread_mutex_unlock(&philo->data->check);
-// 		return (DEAD);
-// 	}
-// 	pthread_mutex_unlock(&philo->data->check);
-// 	return (GOOD);
-// }
-
-// int	check_time(t_data *data, t_philo *philo)
-// {
-// 	if (get_time() - philo->last_meal >= data->t_die)
-// 		return (DEAD);
-// 	return (GOOD);
-// }

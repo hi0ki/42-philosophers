@@ -29,20 +29,26 @@ static void	unlock_forks(t_data *philo)
 void *check(void *param)
 {
 	int i;
+	long time;
 	t_data *philo;
 
 	philo = (t_data *)param;
 	i = 0;
 	while (1)
 	{
-		if (get_time() - philo->last_meal >= philo->t_die)
+		sem_wait(philo->save[philo->id - 1]);
+		time = get_time() - philo->last_meal;
+		sem_post(philo->save[philo->id - 1]);
+		if (time >= philo->t_die)
 		{
-			sem_wait(philo->dead);
+			sem_wait(philo->dead[philo->id - 1]);
 			printf("\033[1;31m%ld %d is died\n", get_time() - philo->start_time , philo->id);
 			exit(EXIT_FAILURE);
 		}
-		else if (philo->n_meals == 0)
+		sem_wait(philo->sem_meals[philo->id - 1]);
+		if (philo->n_meals == 0)
 			break;
+		sem_post(philo->sem_meals[philo->id - 1]);
 		usleep(50);
 	}
 	return (NULL);
@@ -61,9 +67,13 @@ void	*routine(t_data *philo)
 		my_printf("%ld %d is thinking\n", philo);
 		take_forks(philo);
 		my_printf("%ld %d is eating\n", philo);
-		philo->n_meals--;
+		sem_wait(philo->save[philo->id - 1]);
 		philo->last_meal = get_time();
+		// sem_post(philo->save[philo->id - 1]);
 		my_usleep(philo->t_eat, philo);
+		sem_wait(philo->sem_meals[philo->id - 1]);
+		philo->n_meals--;
+		sem_post(philo->sem_meals[philo->id - 1]);
 		unlock_forks(philo);
 		my_printf("%ld %d is sleeping\n", philo);
 		my_usleep(philo->t_sleep, philo);

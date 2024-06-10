@@ -55,7 +55,7 @@ static int	create_threads(t_data *data)
         i++;
     }
 
-    return 0;
+    exit (1);
 }
 
 int	main(int ac, char **av)

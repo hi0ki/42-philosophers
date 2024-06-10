@@ -39,8 +39,10 @@ typedef struct s_philo{
 
 typedef struct s_data{
 	sem_t			*var;
+	sem_t			**dead;
+	sem_t			**save;
+	sem_t			**sem_meals;
 	pthread_t		thread;
-	sem_t			*dead;
 	bool			last_arg;
 	int				*pids;
 	int				id;
