@@ -47,10 +47,12 @@ void	*routine(void *param)
 			break ;
 		my_printf("%ld %d is eating\n", philo);
 		pthread_mutex_lock(&philo->data->save);
-		philo->n_meals--;
 		philo->last_meal = get_time();
 		pthread_mutex_unlock(&philo->data->save);
 		my_usleep(philo->data->t_eat, philo);
+		pthread_mutex_lock(&philo->data->save);
+		philo->n_meals--;
+		pthread_mutex_unlock(&philo->data->save);
 		unlock_forks(philo);
 		my_printf("%ld %d is sleeping\n", philo);
 		my_usleep(philo->data->t_sleep, philo);

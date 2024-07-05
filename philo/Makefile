@@ -3,7 +3,7 @@ FILES= philo.c ft_atoi.c utils.c fill_struct.c routine.c
 OBJ= $(FILES:.c=.o)
 
 NAME= philo
-CC= cc -Werror -Wall -Wextra  #-g -fsanitize=thread
+CC= cc -Werror -Wall -Wextra
 RM= rm -rf
 
 

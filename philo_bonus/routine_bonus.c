@@ -26,6 +26,18 @@ static void	unlock_forks(t_data *philo)
 	sem_post(philo->var);
 }
 
+static int	help_check(t_data *philo)
+{
+	sem_wait(philo->sem_meals);
+	if (philo->n_meals == 0)
+	{
+		sem_post(philo->sem_meals);
+		return (ERROR);
+	}
+	sem_post(philo->sem_meals);
+	return (GOOD);
+}
+
 void	*check(void *param)
 {
 	int		i;
@@ -46,10 +58,8 @@ void	*check(void *param)
 				philo->id);
 			exit(EXIT_FAILURE);
 		}
-		sem_wait(philo->sem_meals);
-		if (philo->n_meals == 0)
+		if (help_check(philo) == ERROR)
 			break ;
-		sem_post(philo->sem_meals);
 		usleep(50);
 	}
 	return (NULL);
